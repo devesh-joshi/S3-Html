@@ -23,7 +23,7 @@ jobs:
 
       - name: Process data and generate HTML
         run: |
-          python process_data.py
+          python process_data.py -o /home/runner/work/S3-Html/S3-Html
           # echo "::set-output name=html_content::$(cat result.html)"
           echo "{html_content}={cat result.html}" >> $GITHUB_STATE
 
