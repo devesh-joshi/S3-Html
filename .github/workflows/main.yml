@@ -13,7 +13,7 @@ jobs:
       - name: Get the path to the file
         run: echo "FILE_PATH=$(find . -name Result.txt)"
       - name: Download the file
-        run: wget -O Result.txt $FILE_PATH
+        run: wget -O app_final_result.txt $FILE_PATH
       # - name: Get the S3 bucket name
       #   run: echo "S3_BUCKET_NAME=$(aws s3 ls | awk '/Result.txt/ {print <span class="math-inline">3\}\'\)"
       # - name\: Download the file from S3
