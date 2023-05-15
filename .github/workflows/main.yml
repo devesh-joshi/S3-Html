@@ -23,15 +23,14 @@ jobs:
 
       - name: Process data and generate HTML
         run: |
-          python process_data.py -o /home/runner/work/S3-Html
-          # echo "::set-output name=html_content::$(cat result.html)"
-          echo "{html_content}={cat result.html}" >> $GITHUB_STATE
+          python process_data.py
+          echo "::set-output name=html_content::$(cat result.html)"
 
       - name: Publish HTML content
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # htmlContent="${{ steps.publish_html.outputs.html_content }}"
+          htmlContent="${{ steps.publish_html.outputs.html_content }}"
           echo "$htmlContent" > html_content.html
 
       - name: Show HTML content
