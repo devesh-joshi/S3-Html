@@ -11,4 +11,4 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - run: curl https://raw.githubusercontent.com/[your-username]/[your-repo]/master/[your-html-file].html
+      - run: curl https://raw.githubusercontent.com/devesh-joshi/S3-Html/master/result.html
