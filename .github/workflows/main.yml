@@ -22,16 +22,15 @@ jobs:
         run: pip install csvkit
 
       - name: Process data and generate HTML
-        id: publish_html
         run: |
           python process_data.py
-          echo "html_content=$PWD/result.html" >> $GITHUB_ENV
+          echo "::set-output name=html_content::$(cat result.html)"
 
       - name: Publish HTML content
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          htmlContent=${{ env.html_content }}
+          htmlContent="${{ steps.publish_html.outputs.html_content }}"
           echo "$htmlContent" > html_content.html
 
       - name: Show HTML content
