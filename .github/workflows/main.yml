@@ -25,7 +25,7 @@ jobs:
         id: publish_html
         run: |
           python process_data.py
-          echo "html_content=$(cat result.html)" >> $GITHUB_ENV
+          echo "html_content=$PWD/result.html" >> $GITHUB_ENV
 
       - name: Publish HTML content
         env:
