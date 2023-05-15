@@ -22,19 +22,19 @@ jobs:
         run: pip install csvkit
 
       - name: Process data and generate HTML
+        id: publish_html
         run: |
           python process_data.py
+          echo "result.html" >> $GITHUB_ENV
+
 
       - name: Publish HTML content
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          htmlContent=$(python process_data.py)
+          htmlContent=$(cat ${{ steps.publish_html.outputs.html_content }})
           echo "$htmlContent" > html_content.html
-          git config --global user.email "devesh.joshi@philips.com"
-          git config --global user.name "devesh-joshi"
-          git add html_content.html
-          git commit -m "Publish HTML content"
-          git push
 
       - name: Show HTML content
         run: |
-          echo $HTML_CONTENT
+          cat html_content.html
