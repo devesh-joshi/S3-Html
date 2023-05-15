@@ -1,25 +1,33 @@
-import csv
-import json
+# Read the data from the file
+try:
+    with open("app_final_result.txt", "r") as file:
+        data = file.readlines()
+except FileNotFoundError:
+    print("Error: File not found.")
+    exit(1)
 
-# Read the JSON data from the file
-with open('result.txt', 'r') as file:
-    data = json.load(file)
 
-# Generate the CSV content
-csv_content = []
-for item in data:
-    csv_content.append([item['Application'], item['Region'], item['Version'], item['result']])
-
-# Write the CSV content to a file
-with open('result.csv', 'w', newline='') as file:
-    writer = csv.writer(file, delimiter=',')
-    writer.writerows(csv_content)
-
-# Generate the HTML content
-html = '''
+# Prepare the HTML content
+html = """
 <html>
 <head>
     <title>Result</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
     <table>
@@ -29,24 +37,27 @@ html = '''
             <th>Version</th>
             <th>Result</th>
         </tr>
-'''
+"""
 
-for row in csv_content:
-    html += f'''
+# Parse the data and generate table rows
+for line in data:
+    values = line.strip().split("|")
+    html += f"""
         <tr>
-            <td>{row[0]}</td>
-            <td>{row[1]}</td>
-            <td>{row[2]}</td>
-            <td>{row[3]}</td>
+            <td>{values[0]}</td>
+            <td>{values[1]}</td>
+            <td>{values[2]}</td>
+            <td>{values[3]}</td>
         </tr>
-    '''
+    """
 
-html += '''
+# Complete the HTML content
+html += """
     </table>
 </body>
 </html>
-'''
+"""
 
 # Write the HTML content to a file
-with open('result.html', 'w') as file:
+with open("result.html", "w") as file:
     file.write(html)
