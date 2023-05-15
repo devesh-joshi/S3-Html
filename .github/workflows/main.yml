@@ -29,7 +29,9 @@ jobs:
         run: |
           htmlContent=$(python process_data.py)
           echo "$htmlContent" > html_content.html
-          gh publish html_content.html
+          git add html_content.html
+          git commit -m "Publish HTML content"
+          git push
 
       - name: Show HTML content
         run: |
