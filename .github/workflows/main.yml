@@ -35,4 +35,4 @@ jobs:
 
       - name: Show HTML content
         run: |
-          echo "::set-output name=html-content::$(cat html_content.html)"
+          echo $HTML_CONTENT
