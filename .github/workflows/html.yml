@@ -9,7 +9,7 @@ jobs:
   show-table:
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      - run: curl https://raw.githubusercontent.com/devesh-joshi/S3-Html/main/result.html
-
+      steps:
+        - uses: actions/checkout@v2
+        - run: curl https://raw.githubusercontent.com/devesh-joshi/S3-Html/main/result.html
+        - run: open result.html
