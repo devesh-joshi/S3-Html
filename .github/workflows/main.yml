@@ -37,4 +37,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: html-file
-          path: ${{ steps.post_comment.outputs.html_content_path }}
+          path: html_content.txt
