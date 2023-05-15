@@ -11,13 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Get the path to the file
-        run: echo "FILE_PATH=$(find . -name Result.txt)"
+        run: echo "FILE_PATH=$(find . -name app_final_result.txt)"
       - name: Download the file
         run: wget -O app_final_result.txt $FILE_PATH
       # - name: Get the S3 bucket name
-      #   run: echo "S3_BUCKET_NAME=$(aws s3 ls | awk '/Result.txt/ {print <span class="math-inline">3\}\'\)"
+      #   run: echo "S3_BUCKET_NAME=$(aws s3 ls | awk '/app_final_result.txt/ {print <span class="math-inline">3\}\'\)"
       # - name\: Download the file from S3
-      #   run\: aws s3 cp s3\://</span>{S3_BUCKET_NAME}/Result.txt .
+      #   run\: aws s3 cp s3\://</span>{S3_BUCKET_NAME}/app_final_result.txt .
       - name: Create the HTML file
         run: |
           echo "<html>" > result.html
@@ -36,7 +36,7 @@ jobs:
             echo "<tr>" >> result.html
             echo "<td>$line</td>" >> result.html
             echo "</tr>" >> result.html
-          done < Result.txt
+          done < app_final_result.txt
           echo "</table>" >> result.html
           echo "</body>" >> result.html
           echo "</html>" >> result.html
