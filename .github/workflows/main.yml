@@ -25,16 +25,14 @@ jobs:
         run: |
           python process_data.py
 
-      - name: Post HTML content as a comment
+      - name: Publish HTML content
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          htmlContent="${{ steps.publish_html.outputs.html-content }}"
-          echo "$htmlContent" > html_content.txt
-          echo "::set-output name=html_content_path::$(pwd)/html_content.txt"
-      
-      - name: Upload HTML artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: html-file
-          path: html_content.txt
+          htmlContent=$(python process_data.py)
+          echo "$htmlContent" > html_content.html
+          echo "::set-output name=html-content::$(pwd)/html_content.html"
+
+      - name: Show HTML content
+        run: |
+          echo "::set-output name=html-content::$(cat html_content.html)"
