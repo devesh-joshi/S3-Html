@@ -25,28 +25,16 @@ jobs:
         run: |
           python process_data.py
 
-      - name: Publish HTML file
-        uses: actions/upload-artifact@v2
-        with:
-          name: html-file
-          path: result.html
-      
-      - name: Publish HTML file
-        run: |
-          echo "::set-output name=html-content::$(cat result.html)"
-        id: publish_html
-        
       - name: Post HTML content as a comment
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           htmlContent="${{ steps.publish_html.outputs.html-content }}"
           echo "$htmlContent" > html_content.txt
-          echo "::set-output name=html_content_path::html_content.txt"
+          echo "::set-output name=html_content_path::$(pwd)/html_content.txt"
       
       - name: Upload HTML artifact
         uses: actions/upload-artifact@v2
         with:
           name: html-file
-          path: ${{ steps.post_html.outputs.html_content_path }}
-      
+          path: ${{ steps.post_comment.outputs.html_content_path }}
