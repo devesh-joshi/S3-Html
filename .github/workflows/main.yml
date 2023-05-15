@@ -30,3 +30,25 @@ jobs:
         with:
           name: html-file
           path: result.html
+      
+      - name: Publish HTML file
+        run: |
+          echo "::set-output name=html-content::$(cat result.html)"
+        id: publish_html
+        
+      - name: Post HTML content as a comment
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const htmlContent = '${{ steps.publish_html.outputs.html-content }}';
+            const octokit = github.getOctokit(token);
+            octokit.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: htmlContent
+            });
+        env:
+          token: ${{ secrets.GITHUB_TOKEN }}
+  
+
