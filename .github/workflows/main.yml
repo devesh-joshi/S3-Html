@@ -27,12 +27,13 @@ jobs:
 
       - name: Publish HTML content
         env:
+          HTML_CONTENT: ${{ steps.publish_html.outputs.html-content }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           htmlContent=$(python process_data.py)
           echo "$htmlContent" > html_content.html
-          echo "::set-output name=html-content::$(pwd)/html_content.html"
 
       - name: Show HTML content
         run: |
           echo $HTML_CONTENT
+
