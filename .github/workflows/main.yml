@@ -1,4 +1,4 @@
-name: Create HTML file
+name: Generate HTML
 
 on:
   push:
@@ -6,39 +6,28 @@ on:
       - main
 
 jobs:
-  create-html-file:
+  generate-html:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Get the path to the file
-        run: echo "FILE_PATH=$(find . -name app_final_result.txt)"
-      - name: Download the file
-        run: wget -O app_final_result.txt $FILE_PATH
-      # - name: Get the S3 bucket name
-      #   run: echo "S3_BUCKET_NAME=$(aws s3 ls | awk '/app_final_result.txt/ {print <span class="math-inline">3\}\'\)"
-      # - name\: Download the file from S3
-      #   run\: aws s3 cp s3\://</span>{S3_BUCKET_NAME}/app_final_result.txt .
-      - name: Create the HTML file
+      - name: Fetch file from repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: pip install csvkit
+
+      - name: Process data and generate HTML
         run: |
-          echo "<html>" > result.html
-          echo "<head>" >> result.html
-          echo "<title>Result</title>" >> result.html
-          echo "</head>" >> result.html
-          echo "<body>" >> result.html
-          echo "<table>" >> result.html
-          echo "<tr>" >> result.html
-          echo "<th>Application</th>" >> result.html
-          echo "<th>Region</th>" >> result.html
-          echo "<th>Version</th>" >> result.html
-          echo "<th>Result</th>" >> result.html
-          echo "</tr>" >> result.html
-          while read -r line; do
-            echo "<tr>" >> result.html
-            echo "<td>$line</td>" >> result.html
-            echo "</tr>" >> result.html
-          done < app_final_result.txt
-          echo "</table>" >> result.html
-          echo "</body>" >> result.html
-          echo "</html>" >> result.html
-      - name: Show the HTML file
-        run: open result.html
+          csvjson app_final_result.txt | json2csv -d "|" -k Application,Region,Version,result -o result.csv
+          csvtotable -c "Application,Region,Version,result" -j result.csv > result.html
+
+      - name: Publish HTML file
+        uses: actions/upload-artifact@v2
+        with:
+          name: html-file
+          path: result.html
