@@ -9,7 +9,7 @@ jobs:
   create-html-file:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Get the path to the file
         run: echo "FILE_PATH=$(find . -name Result.txt)"
       - name: Download the file
