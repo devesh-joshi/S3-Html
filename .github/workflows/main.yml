@@ -43,9 +43,10 @@ jobs:
           htmlContent="${{ steps.publish_html.outputs.html-content }}"
           echo "$htmlContent" > html_content.txt
           echo "::set-output name=html_content_path::html_content.txt"
-
+      
       - name: Upload HTML artifact
         uses: actions/upload-artifact@v2
         with:
           name: html-file
-          path: ${{ steps.post_comment.outputs.html_content_path }}
+          path: ${{ steps.post_html.outputs.html_content_path }}
+      
