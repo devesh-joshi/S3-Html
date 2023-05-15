@@ -1,0 +1,13 @@
+name: Show Table
+
+on:
+push:
+branches:
+- master
+
+jobs:
+show-table:
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v2
+- run: curl https://raw.githubusercontent.com/[your-username]/[your-repo]/master/[your-html-file].html
