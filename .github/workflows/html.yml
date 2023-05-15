@@ -12,4 +12,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: curl https://raw.githubusercontent.com/devesh-joshi/S3-Html/main/result.html
+      - run: export BROWSER=/usr/bin/google-chrome
       - run: open result.html
