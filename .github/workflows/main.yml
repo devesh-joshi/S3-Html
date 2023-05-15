@@ -27,12 +27,11 @@ jobs:
           python process_data.py
           echo "result.html" >> $GITHUB_ENV
 
-
       - name: Publish HTML content
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          htmlContent=$(cat ${{ steps.publish_html.outputs.html_content }})
+          htmlContent=$(cat ${{ env.GITHUB_ENV | grep -o 'result.html' }})
           echo "$htmlContent" > html_content.html
 
       - name: Show HTML content
