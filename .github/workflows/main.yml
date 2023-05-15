@@ -24,7 +24,8 @@ jobs:
       - name: Process data and generate HTML
         run: |
           python process_data.py
-          echo "::set-output name=html_content::$(cat result.html)"
+          # echo "::set-output name=html_content::$(cat result.html)"
+          echo "{html_content}={cat result.html}" >> $GITHUB_STATE
 
       - name: Publish HTML content
         env:
