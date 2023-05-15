@@ -37,13 +37,15 @@ jobs:
         id: publish_html
         
       - name: Post HTML content as a comment
-        uses: octokit/request-action@v2.x
-        with:
-          route: POST /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments
-          headers: |
-            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            {
-              "body": "${{ steps.publish_html.outputs.html-content }}"
-            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          htmlContent="${{ steps.publish_html.outputs.html-content }}"
+          echo "$htmlContent" > html_content.txt
+          echo "::set-output name=html_content_path::html_content.txt"
 
+      - name: Upload HTML artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: html-file
+          path: ${{ steps.post_comment.outputs.html_content_path }}
