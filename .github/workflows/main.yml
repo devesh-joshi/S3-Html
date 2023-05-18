@@ -25,8 +25,8 @@ jobs:
     - name: Commit and push changes
       run: |
         cd github-pages-deploy-action-temp-deployment-folder
-        git config user.name 'github-actions[bot]'
-        git config user.email 'github-actions[bot]@users.noreply.github.com'
+        git config user.name 'devesh-joshi'
+        git config user.email 'devesh.joshi@phlips.com'
         git add .
         git commit --no-verify --allow-empty -m "Deploy to GitHub Pages"
         git push --force origin deploy  # Change this to the branch where you want to deploy
