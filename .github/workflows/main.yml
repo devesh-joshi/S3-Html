@@ -1,38 +1,22 @@
-name: Generate HTML
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - html-test  # Change this to the branch where your file is located
 
 jobs:
-  generate-html:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Fetch file from repository
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.x
-
-      - name: Install dependencies
-        run: pip install csvkit
-
-      - name: Process data and generate HTML
-        run: |
-          python process_data.py
-          echo "::set-output name=html_content::$(cat result.html)"
-
-      - name: Publish HTML content
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          htmlContent="${{ steps.publish_html.outputs.html_content }}"
-          echo "$htmlContent" > html_content.html
-
-      - name: Show HTML content
-        run: |
-          cat html_content.html
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@3.7.1
+      with:
+        branch: html-test  # Change this to the branch where you want to deploy
+        folder: ./  # Change this to the folder containing your "result.html" file
+      env:
+        ACCESS_TOKEN: ${{ secrets.PAT_TOKEN }}
