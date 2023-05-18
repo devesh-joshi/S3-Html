@@ -13,12 +13,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Create deployment branch
+      run: git checkout -b deploy  # Change this to the branch name you want to create
+
     - name: Deploy to GitHub Pages
       run: |
-        git checkout deploy  # Change this to the branch where you want to deploy
         rsync -q -av --checksum --progress ./ github-pages-deploy-action-temp-deployment-folder --delete --exclude CNAME --exclude .nojekyll --exclude .ssh --exclude .git --exclude .github --exclude generate_table.py
       env:
-        ACCESS_TOKEN: ${{ secrets.PAT_TOKEN }} # secret personal token for repo access
+        ACCESS_TOKEN: ${{ secrets.PAT_TOKEN }}  # secret personal token for repo access
 
     - name: Commit and push changes
       run: |
