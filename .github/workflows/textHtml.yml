@@ -31,6 +31,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Set Git user identity
+        run: |
+          git config --global user.email "devesh.joshi@philips.com"
+          git config --global user.name "Devesh Joshi"
       - name: Create gh-pages branch
         run: |
           git branch -D gh-pages || echo "Branch gh-pages does not exist"
@@ -47,4 +51,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.PAT_TOKEN }}
-          publish_dir: ./     
+          publish_dir: ./    
