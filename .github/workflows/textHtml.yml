@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Convert text to HTML table
         run: |
-          awk -F"|" 'BEGIN {print "<html><head><style>table {font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}td, th {border: 1px solid #dddddd;text-align: left;padding: 8px;}</style></head><body><h2>Application Deployment Success Rate</h2><table><tr><th>Application</th><th>Region</th><th>Version</th><th>Result</th></tr>"} {print "<tr><td>" $1 "</td><td>" $2 "</td><td>" $3 "</td><td>" $4 "</td></tr>"} END {print "</table></body></html>"}' app_final_result.txt > index.html
+          awk -F"|" 'BEGIN {print "<html><head><style>table {font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}td, th {border: 1px solid #dddddd;text-align: left;padding: 8px;}.success {background-color: #00FF00;}.skipped {background-color: #FFFF00;}.failed {background-color: #FF0000;}</style></head><body><h2>Application Deployment Success Rate</h2><table><tr><th>Application</th><th>Region</th><th>Version</th><th>Result</th></tr>"} {if ($4 == "success") {print "<tr><td>" $1 "</td><td>" $2 "</td><td>" $3 "</td><td class=\"success\">" $4 "</td></tr>"} else if ($4 == "skipped") {print "<tr><td>" $1 "</td><td>" $2 "</td><td>" $3 "</td><td class=\"skipped\">" $4 "</td></tr>"} else if ($4 == "failed") {print "<tr><td>" $1 "</td><td>" $2 "</td><td>" $3 "</td><td class=\"failed\">" $4 "</td></tr>"}} END {print "</table></body></html>"}' app_final_result.txt > index.html
       - name: Publish index.html
         uses: peaceiris/actions-gh-pages@v3
         with:
