@@ -31,18 +31,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Delete existing gh-pages branch
+      - name: Create gh-pages branch
         run: |
           git branch -D gh-pages || echo "Branch gh-pages does not exist"
+          git checkout --orphan gh-pages
+          git rm -rf .
+          echo "gh-pages branch created" > index.html
+          git add index.html
+          git commit -m "Initialize gh-pages branch"
+          git push origin gh-pages
       - name: Convert text to HTML table
         run: |
           awk -F"|" 'BEGIN {print "<html><head><style>table {font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}td, th {border: 1px solid #dddddd;text-align: left;padding: 8px;}.success {background-color: #00FF00;}.skipped {background-color: #FFFF00;}.failed {background-color: #FF0000;}</style></head><body><h2>Application Deployment Success Rate</h2><table><tr><th>Application</th><th>Region</th><th>Version</th><th>Result</th></tr>"} {if ($4 == "success") {print "<tr><td>" $1 "</td><td>" $2 "</td><td>" $3 "</td><td class=\"success\">" $4 "</td></tr>"} else if ($4 == "skipped") {print "<tr><td>" $1 "</td><td>" $2 "</td><td>" $3 "</td><td class=\"skipped\">" $4 "</td></tr>"} else if ($4 == "failed") {print "<tr><td>" $1 "</td><td>" $2 "</td><td>" $3 "</td><td class=\"failed\">" $4 "</td></tr>"}} END {print "</table></body></html>"}' app_final_result.txt > index.html
-      - name: Clear GitHub Pages cache
-        run: |
-          curl -X POST -H "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" -H "Accept: application/vnd.github.everest-preview+json" "https://api.github.com/repos/${{ github.repository }}/pages/builds"
       - name: Publish index.html
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.PAT_TOKEN }}
-          publish_dir: ./
-      
+          publish_dir: ./     
